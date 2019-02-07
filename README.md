@@ -21,7 +21,7 @@ To achieve the learning objectives, students are expected to complete the follow
 ## I/O Ports Overview
 The Arduino Uno board has 3 ports: *Port C* contains the analog pins A0-A5, *Port D* contains digital pins 0-7, and *Port B* contains digital pins 8-13. For this lab, we will focus on the digital pins in Ports B & D. Digital pins can be configured as either input or output. We have already covered abstractions provided by Arduino such as digitalWrite(), digitalRead(), and pinMode(). This lab will provide the background necessary to write your own version of each of these functions by directly setting bits within specific registers. The figure below shows an overview of the ATmega328P microcontroller.
 
-![io-ports](https://github.com/njlow1202/ECE5560/blob/master/GPIO/io-ports-block-diagram.PNG?raw=true)
+![io-ports](https://github.com/nlowing/ECE5560/blob/master/io-ports-block-diagram.PNG?raw=true)
 
 The Ports are shown in red in the diagram. Let's now discuss some of the circuitry within the Ports and the registers that will be necessary for controlling input and output.
 <br>
@@ -36,7 +36,7 @@ There are 3 main registers that we will be concerned with:
 
 The details of these registers can be found in the data sheet. The figure below shows the B registers (PORTB, DDRB, & PINB), but the D registers (PORTD, DDRD, & PIND) follow a similar format. Each of the bits within PORTx, DDRx, and PINx correspond to a pin on the Arduino board (i.e. PORTD5, DDD5, & PIND5 sets digital pin 5). Be careful when using Port B registers! The bits start from zero, but the pin numbers do not (i.e. digital pin 10 corresponds to bit 2 in the register). Your generic functions will need to take this mapping issue into account.
 
-<img src="https://github.com/njlow1202/ECE5560/blob/master/GPIO/portb.png?raw=true" width="700px" height="400px">
+<img src="https://github.com/nlowing/ECE5560/blob/master/portb.png?raw=true" width="700px" height="400px">
 
 Let's take a look at the circuitry of a Port and examine how setting bit values within the registers allows for input and output at the digital pins. We'll begin with reading a pin.
 <br>
@@ -45,11 +45,11 @@ Let's take a look at the circuitry of a Port and examine how setting bit values 
 ## Reading a Pin
 The figure below shows a schematic for the microcontroller Ports with some comments on reading from a pin.
 
-![pin-read](https://github.com/njlow1202/ECE5560/blob/master/GPIO/reading-pin-5.PNG?raw=true)
+![pin-read](https://github.com/nlowing/ECE5560/blob/master/reading-pin-5.PNG?raw=true)
 
 Reading or writing to a pin requires a specific state of the internal pull-up resistor. In order to read from a pin the internal pull-up resistor has to be enabled. In the figure you can see that when the PORTx register is set to 1 and the DDRx register is set to 0, the result of the AND-NAND combined logic gate is 1. This 1 is then flipped by the inverter, so the pMOS transistor receives a 0. A pMOS transistor acts like a switch: a value of 0 closes the switch, while a value of 1 opens the switch. When the switch is closed (0), the pull-up resistor is enabled. The figure below shows the pMOS states.
 
-![pmos](https://github.com/njlow1202/ECE5560/blob/master/GPIO/pmos-transistor.PNG?raw=true)
+![pmos](https://github.com/nlowing/ECE5560/blob/master/pmos-transistor.PNG?raw=true)
 
 Another feature of the circuitry that is important is the tri-state buffer. The DDRx register controls the tri-buffer. A value of 0 disables the tri-buffer while a value of 1 enables the tri-buffer. Since we are reading from a pin, we need to prevent signal from traveling out to the pin. Thus, we disable the tri-buffer.
 
@@ -60,7 +60,7 @@ Another feature of the circuitry that is important is the tri-state buffer. The 
 ## Writing a Pin
 The figure below shows the same schematic for the microcontroller Ports with some comments on writing to a pin.
 
-![pin-write](https://github.com/njlow1202/ECE5560/blob/master/GPIO/writing-pin-1.PNG?raw=true)
+![pin-write](https://github.com/nlowing/ECE5560/blob/master/writing-pin-1.PNG?raw=true)
 
 In order to write to a pin the internal pull-up resistor has to be disabled. In the figure you can see that the DDRx register is set to 1, which both enables the tri-buffer and disables the internal pull-up resistor. This allows signal to leave from the PORTx register and travel to the pin. The PORTx register can be set to a value of 0 or 1. This value is what gets transmitted to the pin as an output signal.
 

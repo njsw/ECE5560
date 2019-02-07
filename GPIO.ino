@@ -1,3 +1,7 @@
+// Solution to GPIO Lab
+// Author: Nicholas Lowing
+// Date: Spring 2017
+
 //Setup Variables
 int ledPin = 13; //store the first pin number
 
